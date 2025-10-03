@@ -27,7 +27,7 @@ python heraldry_search.py
 
 ## Database
 
-Contains 618 Irish surnames mapped to 364 unique heraldic crests and plates from authentic historical records.
+Contains 563 unique Irish surnames across 618 heraldic entries, mapped to 364 unique crests and plates from authentic historical records.
 
 ## About
 

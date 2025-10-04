@@ -129,10 +129,10 @@ class IrishHeraldrySearch:
         print(Color.YELLOW + "    ║     Does Irish heritage flow through your veins?          ║")
         print(Color.YELLOW + "    ║                                                           ║")
         print(Color.YELLOW + "    ╚═══════════════════════════════════════════════════════════╝" + Color.RESET)
-        print("\n\n\n")
+        print()
 
         while True:
-            response = input(Color.WHITE + "  Your answer (yes/no): " + Color.RESET).strip().lower()
+            response = input(Color.WHITE + "    Your answer (yes/no): " + Color.RESET).strip().lower()
             # Secret shortcuts
             if self.check_menu_shortcut(response):
                 return 'menu'
@@ -152,8 +152,14 @@ class IrishHeraldrySearch:
                 print(Color.RED + "    Please answer 'yes' or 'no'" + Color.RESET)
 
     def normalize_surname(self, surname):
-        """Normalize surname for matching"""
-        return surname.upper().strip().replace("'", "").replace(" ", "")
+        """Normalize surname for matching - handles Mc/MC/Mac variations"""
+        normalized = surname.upper().strip().replace("'", "").replace(" ", "")
+        # Normalize Mc/Mac prefixes for better matching
+        # McAFFREY, MacAFFREY, MCAFFREY all become MCAFFREY
+        if normalized.startswith("MAC") and len(normalized) > 3:
+            # MAC... -> MC... (MacCarthy -> McCarthy)
+            normalized = "MC" + normalized[3:]
+        return normalized
 
     def hodges_easter_egg(self):
         """Easter egg for when someone searches 'Hodges' (Scottish surname)"""
@@ -241,6 +247,94 @@ class IrishHeraldrySearch:
 
         return None
 
+    def charbonneau_easter_egg(self):
+        """Easter egg for when someone searches 'Charbonneau' (French surname)"""
+        import random
+
+        # Matrix code crash effect - scrolling effect
+        matrix_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/"
+
+        # Create scrolling matrix effect by repeatedly clearing and redrawing
+        for frame in range(6):
+            self.clear_screen()
+            print(Color.GREEN, end='')
+            for _ in range(30):  # 30 lines of matrix
+                line = ""
+                for _ in range(80):
+                    line += random.choice(matrix_chars)
+                print(line)
+            print(Color.RESET, end='')
+            sys.stdout.flush()
+            time.sleep(0.06)
+
+        # Flash effect
+        for _ in range(3):
+            self.clear_screen()
+            time.sleep(0.1)
+            print(Color.GREEN)
+            for _ in range(30):
+                line = ""
+                for _ in range(80):
+                    line += random.choice(matrix_chars)
+                print(line)
+            print(Color.RESET)
+            sys.stdout.flush()
+            time.sleep(0.1)
+
+        # Transition to glitchy text
+        time.sleep(0.3)
+        self.clear_screen()
+
+        # Glitchy text effect
+        glitch_messages = [
+            "ERRO̴R̷:̶ ̸D̴A̷T̸A̴B̶A̴S̷E̸ ̶C̷O̸R̴R̶U̴P̷T̸I̴O̷N̸ ̶D̴E̷T̸E̴C̶T̸E̷D̸",
+            "W̷A̸R̶N̴I̷N̸G̶:̴ ̷N̸O̶N̴-̷I̸R̶I̴S̷H̸ ̶S̴U̷R̸N̶A̴M̷E̸ ̶D̴E̷T̸E̶C̴T̷E̸D̶",
+            "S̷Y̸S̶T̴E̷M̸ ̶F̴A̷I̸L̶U̴R̷E̸ ̶I̴M̷M̸I̶N̴E̷N̸T̶.̴.̷.̸"
+        ]
+
+        for msg in glitch_messages:
+            print(Color.BLUE + Color.BOLD + "\n\n" + msg.center(80) + Color.RESET)
+            sys.stdout.flush()
+            time.sleep(0.6)
+
+        time.sleep(0.8)
+        self.clear_screen()
+
+        # Final warning screen - FRENCH theme
+        print(Color.BLUE + Color.BOLD)
+        print("\n" + "=" * 80)
+        print("   █████╗ ██╗     ███████╗██████╗ ████████╗███████╗    ███████╗██████╗  █████╗ ███╗   ██╗ ██████╗ █████╗ ██╗███████╗███████╗")
+        print("  ██╔══██╗██║     ██╔════╝██╔══██╗╚══██╔══╝██╔════╝    ██╔════╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔══██╗██║██╔════╝██╔════╝")
+        print("  ███████║██║     █████╗  ██████╔╝   ██║   █████╗      █████╗  ██████╔╝███████║██╔██╗ ██║██║     ███████║██║███████╗█████╗")
+        print("  ██╔══██║██║     ██╔══╝  ██╔══██╗   ██║   ██╔══╝      ██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██║     ██╔══██║██║╚════██║██╔══╝")
+        print("  ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗    ██║     ██║  ██║██║  ██║██║ ╚████║╚██████╗██║  ██║██║███████║███████╗")
+        print("  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝")
+        print("=" * 80)
+        print(Color.RESET)
+
+        print(Color.CYAN + "\n  ╔══════════════════════════════════════════════════════════════════════════╗")
+        print(Color.CYAN + "  ║                      ⚠️  ALERTE: NOM FRANÇAIS DÉTECTÉ  ⚠️                ║")
+        print(Color.CYAN + "  ╚══════════════════════════════════════════════════════════════════════════╝" + Color.RESET)
+
+        print(Color.WHITE + "\n  The surname " + Color.BOLD + Color.BLUE + "CHARBONNEAU" + Color.RESET + Color.WHITE + " is of FRENCH origin, not Irish!")
+        print()
+        print(Color.CYAN + "  According to historical records:")
+        print(Color.WHITE + "  • Origin: French")
+        print(Color.WHITE + "  • Meaning: 'Little charcoal' or 'charcoal burner'")
+        print(Color.WHITE + "  • Region: France, later French-Canadian")
+        print(Color.WHITE + "  • Occupational surname for someone who made or sold charcoal")
+        print()
+        print(Color.YELLOW + "  This surname does not appear in authentic Irish heraldic records.")
+        print(Color.YELLOW + "  Vous devriez consulter les autorités héraldiques françaises!" + Color.RESET)
+        print(Color.CYAN + "  (You should consult French heraldic authorities!)" + Color.RESET)
+
+        print(Color.BLUE + "\n  ════════════════════════════════════════════════════════════════════════" + Color.RESET)
+        print()
+
+        input(Color.CYAN + "  Press ENTER to return to the tome..." + Color.RESET)
+
+        return None
+
     def find_surname(self, input_surname):
         """Find all entries for a surname in database"""
         normalized_input = self.normalize_surname(input_surname)
@@ -286,6 +380,10 @@ class IrishHeraldrySearch:
         # Easter egg for Hodges (Scottish surname)
         if self.normalize_surname(surname_input) == "HODGES":
             return self.hodges_easter_egg()
+
+        # Easter egg for Charbonneau (French surname)
+        if self.normalize_surname(surname_input) == "CHARBONNEAU":
+            return self.charbonneau_easter_egg()
 
         # Search database
         print()
@@ -446,11 +544,11 @@ class IrishHeraldrySearch:
         print(Color.CYAN + "  ┌──────────────────────────────────────────────────────────┐" + Color.RESET)
         print(Color.YELLOW + "  │ " + Color.WHITE + "Why Multiple Coats of Arms?" + Color.YELLOW + "                             │" + Color.RESET)
         print(Color.CYAN + "  ├──────────────────────────────────────────────────────────┤" + Color.RESET)
-        print(Color.WHITE + "  │ Under Irish heraldic tradition, every family branch      │")
-        print("  │ (sept) that bore the same surname could have its own     │")
-        print("  │ coat of arms. Unlike the English system, Irish heraldry  │")
-        print("  │ treated arms as shared heirlooms of the wider family    │")
-        print("  │ name. Each entry below represents a distinct lineage.   │")
+        print(Color.WHITE + "  │ Under Irish heraldic tradition, every family branch      │" + Color.RESET)
+        print(Color.WHITE + "  │ (sept) that bore the same surname could have its own     │" + Color.RESET)
+        print(Color.WHITE + "  │ coat of arms. Unlike the English system, Irish heraldry  │" + Color.RESET)
+        print(Color.WHITE + "  │ treated arms as shared heirlooms of the wider family    │" + Color.RESET)
+        print(Color.WHITE + "  │ name. Each entry below represents a distinct lineage.   │" + Color.RESET)
         print(Color.CYAN + "  └──────────────────────────────────────────────────────────┘" + Color.RESET)
         print()
 
